@@ -33,12 +33,7 @@ def test_plan_has_no_duplicate_actions():
 
 
 def test_no_solution_returns_none():
-    # TODO: this is your job. Construct a problem where the goal is
-    # unreachable — e.g. a goal that includes an action name not in
-    # ACTIONS, or an action whose "requires" set can never be satisfied
-    # (a circular or impossible prerequisite). Then assert that
-    # bfs_search returns None instead of crashing or hanging forever.
-    ...
+
     impossible_goal = GOAL | {"fake_action"}
 
     plan = bfs_search(
@@ -53,10 +48,7 @@ def test_no_solution_returns_none():
 
 
 def test_large_action_set_terminates():
-    # TODO: build a bigger synthetic ACTIONS dict (15-20 actions, chained
-    # prerequisites) and assert bfs_search still returns within a couple
-    # of seconds. This isn't about speed — it's about proving the search
-    # actually terminates instead of looping.
+
     actions = {}
 
     for i in range(15):
