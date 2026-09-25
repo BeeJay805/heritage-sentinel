@@ -8,9 +8,10 @@ def bfs_search(start, goal, available_actions, apply_action):
         state, path = frontier.popleft()
         if state == goal:
             return path
-        for neighbor in available_actions(state):
-            if neighbor not in visited:
-                frontier.append((neighbor, path + [state]))
-                visited.add(neighbor)
+        for action in available_actions(state):
+            next_state = apply_action(state, action)
+            if next_state not in visited:
+                frontier.append((next_state, path + [action]))
+                visited.add(action)
         ...
     return None  # no valid sequence exists
