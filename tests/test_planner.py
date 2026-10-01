@@ -2,9 +2,10 @@
 from src.restoration_graph import ACTIONS, START, GOAL, available_actions, apply_action
 from src.planner import bfs_search
 
-def is_valid_plan(plan, actions=ACTIONS):
+def is_valid_plan(plan, actions=ACTIONS, tranche_cap=None):
     """A plan is valid if every action's prerequisites are satisfied by
-    the actions before it, and every required action appears exactly once."""
+    the actions before it, and every required action appears exactly once.
+    Check the first two slots' cost when a tranche cap is given."""
     completed = set()
     for action in plan:
         if action in completed:
@@ -12,7 +13,11 @@ def is_valid_plan(plan, actions=ACTIONS):
         if not actions[action]["requires"].issubset(completed):
             return False          # prerequisite violated
         completed.add(action)
-    return completed == set(actions.keys())
+    if completed != set(actions.keys()):
+        return False
+    if tranche_cap is not None:
+        return sum(actions[action]["cost"] for action in plan[:2]) <= tranche_cap
+    return True
 
 
 def test_finds_a_valid_plan():
