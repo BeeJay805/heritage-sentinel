@@ -71,14 +71,16 @@ def test_clean_batches_rarely_raise_drift_alarms():
     assert alarms <= 1
 
 def test_data_generation_is_deterministic():
-    def digests(out):
-        subprocess.run([sys.executable, "tools/make_data.py", out], check=True)
-        return {name: hashlib.sha256(open(os.path.join(out, name), "rb").read()).hexdigest()
-                for name in sorted(os.listdir(out))}
-    with tempfile.TemporaryDirectory() as d1, tempfile.TemporaryDirectory() as d2:
-        first, second = digests(d1), digests(d2)
-    assert sorted(first) == ["incoming_a.jsonl", "incoming_b.jsonl", "reference.jsonl"]
-    assert first == second
+    with tempfile.TemporaryDirectory() as d1:
+        with tempfile.TemporaryDirectory() as d2:
+            subprocess.run([sys.executable, "tools/make_data.py", d1], check=True)
+            subprocess.run([sys.executable, "tools/make_data.py", d2], check=True)
+            for name in ["reference.jsonl", "incoming_a.jsonl", "incoming_b.jsonl"]:
+                with open(os.path.join(d1, name), "rb") as f:
+                    hash1 = hashlib.sha256(f.read()).hexdigest()
+                with open(os.path.join(d2, name), "rb") as f:
+                    hash2 = hashlib.sha256(f.read()).hexdigest()
+                assert hash1 == hash2
 
 def test_pipeline_output_is_reproducible_across_processes():
     runs = [subprocess.run([sys.executable, "src/quality.py", "data/incoming_a.jsonl",

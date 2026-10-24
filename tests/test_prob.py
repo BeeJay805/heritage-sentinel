@@ -19,7 +19,7 @@ def test_conditional_rows_each_sum_to_one():
                           ["x", "y", "z"], ["a", "b"])
     for parent in ["x", "y", "z"]:
         assert sum(cpt[parent].values()) == pytest.approx(1.0)
-    # "z" never appears, so smoothing alone fills its row: uniform over the children
+    # z never shows up so it should be 50/50
     assert cpt["z"] == {"a": 0.5, "b": 0.5}
 
 def test_parent_never_seen_still_has_a_distribution():
