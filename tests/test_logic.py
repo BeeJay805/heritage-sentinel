@@ -80,14 +80,8 @@ def test_deleting_a_rule_is_caught():
     assert not ok and reasons == ["invalid:rot_on_inorganic"]
 
 
-@pytest.mark.parametrize("rid,near_miss,reason", [
-    ("r12", {"id": "near12", "material": "textile", "damage": ["fading"], "severity": "minor"},
-     "invalid:crack_on_textile"),
-    ("r13", {"id": "near13", "material": "ceramic", "damage": ["crack"], "severity": "minor"},
-     "invalid:corrosion_on_ceramic"),
-])
-def test_new_rules_fire_but_near_misses_do_not(rid, near_miss, reason):
+@pytest.mark.parametrize("rid", ["r12", "r13"])
+def test_rare_but_possible_damage_is_not_a_logic_error(rid):
+    # Lab 5: these are unlikely, not impossible, so the likelihood check handles them now
     ok, reasons, _ = validate(REPORTS[rid])
-    assert not ok and reasons == [reason]
-    ok, reasons, _ = validate(near_miss)
     assert ok and reasons == []

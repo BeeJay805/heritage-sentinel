@@ -23,6 +23,4 @@ CLAUSES = [
     rule("invalid:corrosion_on_organic", "damage_corrosion", "organic"),
     rule("invalid:none_but_damaged", "severity_none", "has_damage"),
     rule("invalid:structural_risk_marked_minor", "structural_risk", "severity_minor"),
-    rule("invalid:crack_on_textile", "damage_crack", "material_textile"),
-    rule("invalid:corrosion_on_ceramic", "damage_corrosion", "material_ceramic"),
 ]
